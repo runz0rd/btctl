@@ -16,7 +16,7 @@ const (
 
 type BluetoothCtl exec.Cmd
 
-func NewBluetoothCtl(device, ip, token string, debug bool) (*BluetoothCtl, error) {
+func NewBluetoothCtl() (*BluetoothCtl, error) {
 	// check for bluetoothctl
 	_, err := exec.LookPath("bluetoothctl")
 	if err != nil {
@@ -59,6 +59,17 @@ func (_ BluetoothCtl) IsConnected(ctx context.Context) (bool, error) {
 		return false, errors.WithMessage(err, string(out))
 	}
 	if strings.Contains(string(out), isConnectedIndicator) {
+		return true, nil
+	}
+	return false, nil
+}
+
+func (_ BluetoothCtl) IsPowered(ctx context.Context) (bool, error) {
+	out, err := exec.CommandContext(ctx, "bluetoothctl", "show").CombinedOutput()
+	if err != nil {
+		return false, errors.WithMessage(err, string(out))
+	}
+	if strings.Contains(string(out), isPoweredIndicator) {
 		return true, nil
 	}
 	return false, nil
