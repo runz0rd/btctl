@@ -1,2 +1,2 @@
 build:
-	go build -o btctl main.go
+	go build -o btctl cmd/main.go
