@@ -53,8 +53,8 @@ func (_ BluetoothCtl) Connect(ctx context.Context, device string) error {
 	return nil
 }
 
-func (_ BluetoothCtl) IsConnected(ctx context.Context) (bool, error) {
-	out, err := exec.CommandContext(ctx, "bluetoothctl", "info").CombinedOutput()
+func (_ BluetoothCtl) IsConnected(ctx context.Context, device string) (bool, error) {
+	out, err := exec.CommandContext(ctx, "bluetoothctl", "info", device).CombinedOutput()
 	if err != nil {
 		return false, errors.WithMessage(err, string(out))
 	}
